@@ -1,0 +1,86 @@
+@import '../../styles/variables.scss';
+@import "../../styles/mixins.scss";
+@import "../../styles/index.scss";
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+  // background-color: $color-gray-100;
+  min-height: 100vh;
+  min-width: 240px;
+  height:100%;
+  padding-left: 10px;
+  top:0;
+  left:0;
+  .mainContent {
+    flex-grow: 1;
+    padding: $spacing-unit;
+
+    @include small {
+      padding: $spacing-unit / 2;
+    }
+  }
+ 
+  @include responsive_W550px{
+    height: 100%;
+  }
+
+  &.sidebarOpen {
+    margin-left: 160px;
+  }
+
+  &.sidebarClosed {
+    margin-left: 50px;
+  }
+}
+
+.sidebar {
+  &.open {
+    margin-left: 160px;
+  }
+
+  &.closed {
+    margin-left: 50px;
+    }
+}
+
+
+
+.pageTitle{
+  font-size: $font-h4;
+  color: $color-gray-300;
+  margin:2%;
+}
+
+
+// Stilizarea specifică pentru meniul secundar
+.secondaryMenu {
+  display: flex;
+  // justify-content: space-around;
+  align-items: center;
+  // background-color: $color-background;
+  border-bottom: 1px solid $color-black;
+  padding: $spacing-unit / 2;
+
+  @include small {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  a {
+    text-decoration: none;
+    color: $color-text;
+    padding: $spacing-unit / 2;
+    margin: 0 $spacing-unit / 4;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+    border: 2px solid transparent;
+    &:hover, &:focus, &.active {
+      // background-color: $color-primary;
+      color: $color-primary;
+      border-bottom: 2px solid $color-gray-300;
+      border-radius: 0px;
+    }
+  }
+}

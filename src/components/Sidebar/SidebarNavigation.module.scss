@@ -1,0 +1,158 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import "../../styles/index.scss";
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 160px;
+  height: 100vh;
+  position: fixed;
+  border-right: 1px solid;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease;
+
+  @include responsive_W550px {
+    height: 100%;
+  }
+
+  hr {
+    display: block;
+    width: 100%;
+    border: 1px solid #424;
+  }
+}
+
+.sidebar button {
+  font-size: 30px;
+  display: flex;
+}
+
+.sidebar.closed {
+  width: 50px;
+
+  .profileImg {
+    margin-top: 30px;
+  }
+
+  .profileImg,
+  .notificationBell,
+  .img {
+    font-size: 20px;
+  }
+
+  .img {
+    margin: 0 auto;
+  }
+}
+
+.buttonToggleSideBar {
+  position: fixed;
+  top: 5px !important;
+  left: 0 !important;
+}
+
+.headerSideBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 15%;
+
+}
+
+.profileContainer a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 10px;
+}
+
+.profileImg,
+.notificationBell {
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+
+.menuItems {
+  display: flex;
+  flex-direction: column;
+  height: 70%;
+
+  hr {
+    border: 1px solid rgba(160, 160, 160, 0.377) !important;
+    margin: 0.25em 0 !important;
+    opacity: 1 !important;
+  }
+}
+
+.menuItem,
+.activeMenuItem {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  margin-left: 0.03em;
+  margin-top: 12px;
+  border-left: 3px solid transparent;
+
+  span {
+    margin: 0 auto;
+    font-size: 14px;
+    display: block;
+  }
+}
+
+.img {
+  font-size: 25px;
+  margin-left: 20px;
+}
+
+.activeMenuItem {
+  animation: highlight 0.7s ease-in-out forwards;
+}
+
+@keyframes highlight {
+  to {
+    color: rgb(51, 54, 243);
+    border-left: 3px solid orange; // Schimbați această culoare după preferință
+    font-weight: bold;
+  }
+}
+
+.activeMenuProfile {
+  animation: highlightProfile 0.7s ease-in-out forwards;
+}
+
+@keyframes highlightProfile {
+  to {
+    color: rgb(51, 54, 243);
+    font-weight: bold;
+  }
+}
+
+.bottomSideBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 auto;
+  height: 15%;
+  align-items: center;
+}
+
+.bottomSideBar button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // margin:40px 10px 20px 10px;
+}
+
+.bottomSideBar span {
+  font-size: 14px;
+}

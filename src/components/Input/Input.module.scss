@@ -1,0 +1,144 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+.containerInput {
+  position: relative;
+
+  input {
+    border: none;
+    border-bottom: 2px solid $color-gray-200;
+    padding: 10px 45px 10px 12px !important;
+    width: 100%;
+    border-radius: 8px;
+    color: $color-black;
+    font-size: $font-body-normal;
+    font-weight: $font-medium;
+    line-height: 24px;
+    // margin-bottom: 15px;
+    // padding-right: 1rem;
+    word-wrap: break-word;
+    cursor: pointer;
+
+    &:hover,
+    &:active,
+    &:focus {
+      border-color: $color-gray-400;
+    }
+
+    &:disabled {
+      background: $color-gray-50;
+      border: unset;
+    }
+
+    @media screen and (max-width:360px) {
+      // padding: 7px 45px 7px 12px !important;
+      line-height: 12px;
+    }
+  }
+
+  input::placeholder {
+    color: $color-gray-200;
+    font-size: $font-body-normal;
+    font-weight: $font-medium;
+    line-height: 24px;
+    white-space: pre;
+
+    @media screen and (max-width:360px) {
+      font-size: $font-body-small;
+      line-height: 12px;
+    }
+  }
+
+  label {
+    color: $color-gray-500;
+    font-size: $font-body-small;
+    font-weight: $font-medium;
+    line-height: 22px;
+    display: flex;
+    margin-bottom: 1px;
+  }
+
+  input:focus:required {
+    &:invalid {
+      color: red;
+      border-color: red;
+      box-shadow: 0 0 6px red;
+    }
+
+    &:valid,
+    &:placeholder-shown {
+      border-color: green;
+      box-shadow: 0 0 8px green;
+    }
+  }
+
+  .icon {
+    position: absolute;
+    // bottom: 30%;
+    transform: translate(-100%, 50%);
+    border-left: 1px solid $color-gray-200;
+    margin-left: -12px;
+    padding-left: 10px;
+    width: fit-content;
+    height: auto;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+
+  }
+
+  @include responsive_W550px {
+    .icon {
+      margin-left: -10px;
+    }
+
+    svg {
+      width: 16px;
+      // height: 16px;
+    }
+  }
+
+  @media screen and (max-width:360px){
+    svg {
+      height: 16px;
+    }
+  }
+
+  .iconX {
+    position: absolute;
+    // bottom: 30%;
+    transform: translate(-100%, 50%);
+    border-left: 1px solid $color-gray-200;
+    margin-left: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: fit-content;
+    height: auto;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+
+  p {
+    font-size: $font-body-tiny;
+    font-weight: $font-regular;
+    line-height: 20px;
+    margin-top: 4px;
+  }
+
+  .disabled {
+    fill: $color-gray-200;
+  }
+
+  .inputErr {
+    border-color: $color-alert-400;
+  }
+
+  .helperErr {
+    color: $color-alert-500;
+  }
+}
