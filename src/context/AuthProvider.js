@@ -1,7 +1,9 @@
 import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
-import { getUserById } from "../api/API";
+import { getAdminByID, getSecretar } from "../api/API";
 const AuthContext = createContext({});
+
+//! emailToLog => Id Admin Logged in Session
 
 export const AuthProvider = ({ children }) => {
 
@@ -9,44 +11,50 @@ export const AuthProvider = ({ children }) => {
   // user
   const [user, setUser] = useState(null);
 
-  const userToken =
-    rememberMe || !!localStorage.getItem("token")
-      ? localStorage.getItem("token")
-      : sessionStorage.getItem("token");
+  const userIsLogged =
+    rememberMe || !!localStorage.getItem("emailToLog")
+      ? localStorage.getItem("emailToLog")
+      : sessionStorage.getItem("emailToLog");
 
-console.log(user);
+  console.log(user);
   const isLoggedIn = () => {
-    return !!userToken;
+    return !!userIsLogged;
   };
 
   // logout function
-  function logout(){
-    sessionStorage.removeItem("token")
-    localStorage.removeItem("token")
+  function logout() {
+    sessionStorage.removeItem("emailToLog")
+    localStorage.removeItem("emailToLog")
     setUser(null);
   }
 
   useEffect(() => {
-    if (!user && userToken) {
-      const decodedToken = jwtDecode(JSON.stringify(userToken));
+    if (!user && userIsLogged) {
+      // const decodedToken = jwtDecode(JSON.stringify(userIsLogged));
       // setUser(decodedToken);
-      //fetchUser(decodedToken.userId);
+      fetchUser(rememberMe || !!localStorage.getItem("emailToLog")
+        ? localStorage.getItem("emailToLog")
+        : sessionStorage.getItem("emailToLog"));
     }
-  }, [userToken])
+  }, [userIsLogged])
 
-  const fetchUser = async (userID) => {
+  const fetchUser = async (email) => {
     try {
-        const response = await getUserById(userID);
+      const response = await getAdminByID(email);
+      if (response.status === 400) {
+        const resp = await getSecretar();
         if (response?.status === 200) {
-          setUser(response?.data);
+          const emailObject = resp.find(item => item.emailSecretar === localStorage.getItem('emailToLog') || item.emailSecretar === sessionStorage.getItem('emailToLog'));
+          console.log(emailObject);
+          setUser(emailObject);
         }
+      }
+      if (response?.status === 200) {
+        setUser(user?.data);
+      }
     }
-     catch (error) {
-      // setUser(null);
-      console.log("Error: ", error);
-      // logout();
-      // window.location.reload();
-      window.alert("The penguins escaped from the zoo.\n🐧🐧🐧🐧🐧\nThey jumped all over our page and disconnected you.\nYou can login back, we captured them")
+    catch (error) {
+      console.log("Waiting for data to fetch...");
     }
   };
 
@@ -60,7 +68,7 @@ console.log(user);
         rememberMe,
         setRememberMe,
         isLoggedIn,
-        userToken,
+        userIsLogged,
         fetchUser,
         logout,
       }}

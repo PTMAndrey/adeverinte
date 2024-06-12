@@ -12,18 +12,6 @@ import ProtectedRoutes from "./routes/ProtectedRoutes";
 import Alert from "./components/Alert/Alert";
 import useStateProvider from "./hooks/useStateProvider";
 import Onboarding from "./pages/Onboarding/Onboarding";
-// import Sidebar from "./components/Sidebar/SidebarNavigation";
-// import Profile from './pages/Profile/Profile';
-// import TeamRoles from './pages/TeamRoles/TeamRoles';
-// import Departments from './pages/Departments/Departments';
-// import Projects from './pages/Projects/Projects';
-// import Skills from './pages/Skills/Skills';
-// import Teams from './pages/Teams/Teams';
-// import Users from './pages/Users/Users';
-// import Notifications from './pages/Notifications/Notifications';
-// import Proposals from './pages/Proposals/Proposals';
-// import Header from "./components/Header/Header";
-import User from './pages/User/User';
 import NotFound from './pages/NotFound/NotFound';
 import useAuthProvider from './hooks/useAuthProvider';
 import useWindowDimensions from "./hooks/useWindowDimensions"
@@ -31,8 +19,10 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SidebarNavigation from './components/Sidebar/SidebarNavigation';
-import Secretariat from './pages/Secretariat/Secretariat';
 import Studenti from './pages/Studenti/Studenti';
+import Profile from './pages/Profile/Profile';
+import Adeverinte from './pages/Secretariat/Adeverinte/Adeverinte';
+import Facultate from './pages/Facultate/Facultate';
 
 
 function App() {
@@ -75,10 +65,25 @@ function App() {
         >
           {/* protected routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/users" element={<User />} />
-          <Route path="/secretariat" element={<Secretariat />} />
-          <Route path="/studenti" element={<Studenti />} />
-          
+          <Route path="/profil">
+            <Route path="info" element={<Profile />} />
+          </Route>
+          {user?.rol !== 'ADMIN' &&
+            <Route path="/facultate">
+              <Route path="info" element={<Facultate />} />
+            </Route>
+          }
+          <Route path="/studenti">
+            <Route path="lista" element={<Studenti />} />
+            <Route path="adauga" element={<Studenti />} />
+          </Route>
+
+          <Route path="/adeverinte">
+            <Route path="cereri" element={<Adeverinte />} />
+            <Route path="acceptate" element={<Adeverinte />} />
+            <Route path="respinse" element={<Adeverinte />} />
+          </Route>
+
         </Route>
 
         <Route

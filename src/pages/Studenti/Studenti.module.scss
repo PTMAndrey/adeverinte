@@ -1,0 +1,308 @@
+@import "../../styles/variables.scss";
+@import "../../styles/mixins.scss";
+
+.containerInvitiations {
+  width: 500px;
+
+  @include responsive_W750px {
+    width: 100%;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  min-width: 220px;
+  justify-content: flex-start;
+}
+
+// all employees
+
+
+.pageStudenti{
+  display: flex;
+  flex-direction: column;
+  margin: 2em;
+
+  p,
+  div,
+  a,
+  ul,
+  li {
+    -webkit-user-select: auto;
+    /* Safari */
+    -ms-user-select: auto;
+    /* IE 10 and IE 11 */
+    user-select: auto;
+  }
+
+  ul {
+    padding-left: 0;
+
+  }
+
+
+  hr {
+    border: 1px solid #000 !important;
+    margin: 10px 0;
+  }
+
+  @include responsive_W550px {
+    align-items: center;
+
+    hr {
+      width: 100%;
+      margin: 15px 0;
+    }
+  }
+
+}
+
+.refreshTable {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+}
+
+
+.tableButtons {
+  cursor: pointer;
+
+  @include responsive_W550px {
+    font-size: 17px !important;
+  }
+}
+
+.allEmployeesButtonsAction {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.authError {
+  color: $color-alert-400;
+  font-size: $font-body-small;
+  width: 415px;
+}
+
+.iconWhite {
+  color: $color-white !important;
+}
+
+.paginationBar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.cardButtons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.sortButtonCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: $color-primary-300;
+  color: $color-white !important;
+  margin-bottom: 20px;
+
+  p {
+    padding: 5px;
+    font-size: $font-body-small;
+  }
+}
+
+.listOfRoles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  li {
+    padding: 5px 0;
+  }
+
+  @include responsive_W550px {
+    align-items: baseline;
+  }
+}
+
+// invitations
+.pageInvitations h2 {
+  margin: 2em 0;
+  font-weight: $font-bold;
+}
+
+.containerInvitiations {
+  width: 500px;
+
+  @include responsive_W750px {
+    width: 100%;
+  }
+}
+
+.dropzone {
+  cursor: pointer;
+  background-color: $color-gray-50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  height: 128px;
+  width: 200px;
+  margin-bottom: 1rem;
+
+  @include responsive_W550px {
+    width: 167px;
+  }
+
+  &:hover {
+    background-color: $color-gray-100;
+  }
+
+  p {
+    font-weight: $font-body-small;
+    font-size: $font-regular;
+    color: $color-gray-400;
+    margin: 0;
+    padding: 1rem;
+    text-align: center;
+  }
+}
+
+.accept {
+  border: 2px dashed $color-success-400;
+}
+
+.reject {
+  border: 2px dashed $color-alert-400;
+}
+
+.error {
+  color: $color-alert-400;
+  font-size: $font-body-tiny;
+  margin-top: 4px;
+}
+
+.uploadedFileInfo {
+  width: 300px;
+}
+
+input:disabled {
+  cursor: not-allowed !important;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, .1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.card {
+  background-color: #95c9f49e !important;
+  box-shadow: 10px 10px 5px 5px $color-gray-200 !important;
+  opacity: 1 !important;
+
+  -webkit-user-select: text !important;
+  /* Safari */
+  -ms-user-select: text !important;
+  /* IE 10 and IE 11 */
+  user-select: text !important;
+}
+
+.dropzone {
+    cursor: pointer;
+    background-color: $color-gray-50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    height: 128px;
+    width: 200px;
+    margin-bottom: 1rem;
+  
+    @include responsive_W550px {
+      width: 167px;
+    }
+  
+    &:hover {
+      background-color: $color-gray-100;
+    }
+  
+    p {
+      font-weight: $font-body-small;
+      font-size: $font-regular;
+      color: $color-gray-400;
+      margin: 0;
+      padding: 1rem;
+      text-align: center;
+    }
+  }
+  
+  .accept {
+    border: 2px dashed $color-success-400;
+  }
+  
+  .reject {
+    border: 2px dashed $color-alert-400;
+  }
+  
+  .error {
+    color: $color-alert-400;
+    font-size: $font-body-tiny;
+    margin-top: 4px;
+  }
+  
+  .uploadedFileInfo {
+    width: 300px;
+  }
+  
+  input:disabled {
+    cursor: not-allowed !important;
+  }
+  
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, .1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #09f;
+    animation: spin 1s ease infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .card {
+    background-color: #95c9f49e !important;
+    box-shadow: 10px 10px 5px 5px $color-gray-200 !important;
+    opacity: 1 !important;
+  
+    -webkit-user-select: text !important;
+    /* Safari */
+    -ms-user-select: text !important;
+    /* IE 10 and IE 11 */
+    user-select: text !important;
+  }

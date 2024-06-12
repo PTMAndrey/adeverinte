@@ -5,7 +5,7 @@ import styles from "./Login.module.scss";
 import useAuthProvider from "../../../hooks/useAuthProvider";
 import useStateProvider from "../../../hooks/useStateProvider";
 
-import { loginAdmin, loginStudent } from "../../../api/API";
+import { loginAdmin, login } from "../../../api/API";
 import Input from "../../../components/Input/Input";
 import Button from "../../../components/Button/Button";
 import { jwtDecode } from "jwt-decode";
@@ -13,14 +13,15 @@ import { GoogleIcon, VisibilityIcon, VisibilityOffIcon } from "../../../assets/i
 import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
-  const { rememberMe, fetchUser, setRememberMe, setUser } = useAuthProvider();
+  const allowedDomains = ['student.usv.ro', 'usv.ro', 'usm.ro'];
+  const { rememberMe, fetchUser, setRememberMe, setUser, logout } = useAuthProvider();
   const { setAlert } = useStateProvider();
   const navigate = useNavigate();
 
   const [passwordShown, setPasswordShown] = useState(true);
 
   const [formValue, setFormValue] = useState({
-    eMailAdress: "",
+    email: "",
     password: "",
   });
   const [showErrors, setShowErrors] = useState(false);
@@ -33,11 +34,11 @@ const Login = () => {
   };
   const checkErrors = (field) => {
     // email
-    if (field === "eMailAdress") {
+    if (field === "email") {
       let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-      if (formValue.eMailAdress.length === 0)
+      if (formValue.email.length === 0)
         return "This field is mandatory!";
-      else if (reg.test(formValue.eMailAdress) === false)
+      else if (reg.test(formValue.email) === false)
         return "Email address is invalid!";
     }
 
@@ -72,13 +73,12 @@ const Login = () => {
     if (isFormValid()) {
       setShowErrors(false);
       try {
-        const response = await loginAdmin(formValue.eMailAdress, formValue.password);
-        if (response !== null) {
-          const decodedToken = jwtDecode(response.data.jwt);
-          if (rememberMe) localStorage.setItem('token', response.data.jwt);
-          else sessionStorage.setItem('token', response.data.jwt);
-          // setUser(decodedToken);
-          const user = await fetchUser(decodedToken.userId);
+        const response = await loginAdmin(formValue.email, formValue.password);
+        if (response.status === 200) {
+          //! emailToLog => Id Admin Logged in Session
+          if (rememberMe) localStorage.setItem('emailToLog', response?.data.idAdministrator);
+          else sessionStorage.setItem('emailToLog', response?.data.idAdministrator);
+          setUser(response?.data);
           navigate("/");
 
           setAlert({
@@ -105,17 +105,26 @@ const Login = () => {
 
   const handleGoogleLogin = async (objDecoded, token) => {
     try {
-      const response = await loginStudent(objDecoded.email);
-      if (response !== null) {
-        if (rememberMe) localStorage.setItem('token', token.credential);
-        else sessionStorage.setItem('token', token.credential);
-        setUser(response?.data);
-        // const user = await fetchUser(objDecoded.userId);
-        console.log(response?.data, objDecoded, token)
-        //navigate("/");
-        // const googleFormsUrl = "https://forms.gle/yJa8VuKWNVJoRUXt5"; // Schimba cu URL-ul tău
-        // window.location.href = googleFormsUrl;
-        window.open("https://forms.gle/yJa8VuKWNVJoRUXt5");
+      const response = await login(objDecoded.email);
+      if (response.status === 200) {
+        // if (rememberMe) localStorage.setItem('emailToLog', token.credential);
+        // else sessionStorage.setItem('emailToLog', token.credential);
+        // const user = await fetchUser(objDecoded.idStudent);
+        if (response?.data.rol === 'SECRETAR') {
+          if (rememberMe) localStorage.setItem('emailToLog', response?.data.emailSecretar);
+          else sessionStorage.setItem('emailToLog', response?.data.emailSecretar);
+          setUser(response?.data);
+        }
+        if (response?.data.rol === 'STUDENT') {
+          if (rememberMe) localStorage.setItem('emailToLog', response?.data.emailStudent);
+          else sessionStorage.setItem('emailToLog', response?.data.emailStudent);
+          setUser(response?.data);
+          console.log(response?.data, objDecoded, token)
+
+          const googleFormsUrl = "https://forms.gle/yJa8VuKWNVJoRUXt5";
+          window.location.href = googleFormsUrl;
+        }
+
 
         setAlert({
           type: "success",
@@ -159,12 +168,12 @@ const Login = () => {
                 placeholder={"Email"}
                 required
                 label="Email *"
-                id="eMailAdress"
-                name="eMailAdress"
-                value={formValue.eMailAdress}
+                id="email"
+                name="email"
+                value={formValue.email}
                 onChange={handleChange}
-                error={showErrors && checkErrors("eMailAdress") ? true : false}
-                helper={showErrors ? checkErrors("eMailAdress") : ""}
+                error={showErrors && checkErrors("email") ? true : false}
+                helper={showErrors ? checkErrors("email") : ""}
               />
 
 
@@ -217,11 +226,13 @@ const Login = () => {
               onSuccess={credentialResponse => {
                 const credentialResponseDecode = jwtDecode(credentialResponse.credential);
                 console.log(credentialResponseDecode);
-                if (credentialResponseDecode.hd === 'student.usv.ro' || credentialResponseDecode.hd === 'usv.ro' || credentialResponseDecode.hd === 'usm.ro')
-                  handleGoogleLogin(credentialResponseDecode, credentialResponse);
-                else {
-                  alert('Please use your USV account');
-                }
+                //? this code below is important
+                //! DO NOT DELETE
+                //if (allowedDomains.includes(credentialResponseDecode.hd))
+                handleGoogleLogin(credentialResponseDecode, credentialResponse);
+                //else {
+                //alert('Please use your USV account');
+                //}
               }}
               onError={() => {
                 console.log('Login Failed');

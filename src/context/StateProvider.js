@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import { getFacultate } from "../api/API";
 
 const StateContext = createContext({});
 
@@ -32,7 +33,22 @@ export const StateProvider = ({ children }) => {
     fetchCereriAdeverinte();
   }, []);
 
+  const [facultate, setFacultate] = useState(null);
 
+  const fetchFacultate = async () => {
+    try {
+      const response = await getFacultate();
+      if (response?.status === 200) {
+        setFacultate(response.data[0])
+      }
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message || "Something went wrong...", // Use the error message from the catch
+      });
+    }
+  };
   return <StateContext.Provider
     value={{
       alert,
@@ -40,6 +56,9 @@ export const StateProvider = ({ children }) => {
       pageSize,
       cereriAdeverinte,
       setCereriAdeverinte,
+      facultate,
+      setFacultate,
+      fetchFacultate,
     }}
   >{children}</StateContext.Provider>;
 };

@@ -2,25 +2,24 @@
 export const getLinksForRoute = (user, segment) => {
   // Aici adaugi logica pentru a returna link-urile specifice fiecărei rute
   switch (segment) {
-    case 'users':
-      return [
-        { text: 'Users', path: '/users' },
-      ];
     case '/':
       return [
         { text: 'Dashboard', path: '/' },
       ];
-    case 'secretariat':
+    case 'facultate':
       return [
-        { text: 'Secretariat', path: '/secretariat' },
+        { text: 'Info', path: '/facultate/info' },
       ];
     case 'studenti':
       return [
-        { text: 'Studenti', path: '/studenti' },
+        { text: 'Studenti', path: '/studenti/lista' },
+        { text: 'Adaugă', path: '/studenti/adauga' },
       ];
-    case 'notifications':
+    case 'adeverinte':
       return [
-        { text: 'Notifications', path: '/notifications' },
+        { text: 'Cereri', path: '/adeverinte/cereri' },
+        { text: 'Acceptate', path: '/adeverinte/acceptate' },
+        { text: 'Respinse', path: '/adeverinte/respinse' },
       ];
     default:
       return [];

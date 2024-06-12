@@ -23,3 +23,8 @@ export { default as HighlightOffRoundedIcon } from '@mui/icons-material/Highligh
 export { default as PersonSearchRoundedIcon } from '@mui/icons-material/PersonSearchRounded';
 export { default as ManageAccountsIcon } from '@mui/icons-material/ManageAccounts';
 export { default as ContactMail } from '@mui/icons-material/ContactMail';
+export { default as GroupsIcon } from '@mui/icons-material/Groups';
+export { default as BusinessIcon } from '@mui/icons-material/Business';
+export { default as CloseFullscreenIcon } from '@mui/icons-material/CloseFullscreen';
+export { default as FullscreenIcon } from '@mui/icons-material/Fullscreen';
+export { default as LogoutIcon } from '@mui/icons-material/Logout';

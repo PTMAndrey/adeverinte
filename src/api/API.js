@@ -8,33 +8,12 @@ axios.defaults.headers = {
   "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
   'Content-Type': 'application/json'
 };
-//? token will be added by auth middleware
-// axios.interceptors.request.use(
-//   (config) => {
-//     // Attempt to retrieve the token from localStorage or sessionStorage
-//     const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-
-//     // If the token exists, append it to the Authorization header
-//     if (token) {
-//       config.headers['Authorization'] = `Bearer ${token}`;
-//     }
-
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
-
 
 // ---------------------------- Calls ----------------------------------
 export const loginAdmin = async (email, password) => {
   try {
-    const response = await axios.post('/auth/login?email='+email+'&password='+password);
-    if (response.data.jwt === '')
-      return null;
-    else
-      return response;
+    const response = await axios.post('/auth/administrator/login?email='+email+'&parola='+password);
+    return response;
   } catch (error) {
     if (error.response) {
       throw new Error(error.response.data|| "Something went wrong... Try again later");
@@ -45,9 +24,9 @@ export const loginAdmin = async (email, password) => {
   }
 };
 
-export const loginStudent = async (emailStudent) => {
+export const login = async (email) => {
     try {
-      const response = await axios.post('/auth/login?emailStudent='+emailStudent);
+      const response = await axios.post('/auth/login?email='+email);
       if (response.data.jwt === '')
         return null;
       else
@@ -64,10 +43,10 @@ export const loginStudent = async (emailStudent) => {
   };
   
   
-// get user by id
-export const getUserById = async (id) => {
+// get admin by id
+export const getAdminByID = async (id) => {
   try {
-    const response = await axios.get("/user/getById?idUser=" + id);
+    const response = await axios.get("/administrator/get/" + id);
     return response;
   } catch (error) {
     if (error.response) {
@@ -81,9 +60,57 @@ export const getUserById = async (id) => {
 
 
 
-export const sendEmailInvitations = async (data) => {
+export const addStudents = async (data) => {
   try {
-    const response = await axios.post('/email/send', data);
+    const response = await axios.post('/student/addMultiple', data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// export const sendEmail = async (data) => {
+//   try {
+//     const response = await axios.post('/email/send', data);
+//     return response;
+//   } catch (error) {
+//     if (error.response) {
+//       throw new Error(error.response.data || "Something went wrong... Try again later");
+
+//     } else {
+//       throw new Error("Network error or other issue");
+//     }
+//   }
+// };
+
+
+ 
+// get facultate
+export const getFacultate = async () => {
+  try {
+    const response = await axios.get("/facultate/getAll");
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+ 
+// get facultate
+export const getSecretar = async () => {
+  try {
+    const response = await axios.get("/secretar/getAll");
     return response;
   } catch (error) {
     if (error.response) {

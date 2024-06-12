@@ -1,5 +1,47 @@
-@import "../../styles/variables.scss";
-@import "../../styles/mixins.scss";
+
+
+@import "../../../styles/variables.scss";
+@import "../../../styles/mixins.scss";
+
+.homeContainer {
+    padding: 20px;
+  }
+  
+  .styledTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 18px;
+    text-align: left;
+  
+    th, td {
+      padding: 12px 15px;
+    }
+  
+    thead tr {
+      background-color: #009879;
+      color: #ffffff;
+      text-align: left;
+      font-weight: bold;
+    }
+  
+    tbody tr {
+      border-bottom: 1px solid #dddddd;
+  
+      &:nth-of-type(even) {
+        background-color: #f3f3f3;
+      }
+  
+      &:last-of-type {
+        border-bottom: 2px solid #009879;
+      }
+  
+      &:hover {
+        background-color: #f1f1f1;
+      }
+    }
+  }
+  
 
 
 .container {
@@ -12,8 +54,8 @@
 // all employees
 
 
-.pageAllEmployees,
-.pageInvitations {
+.pageAdaugaStudenti,
+.pageAdeverinte {
   display: flex;
   flex-direction: column;
   margin: 2em;
@@ -124,12 +166,12 @@
 }
 
 // invitations
-.pageInvitations h2 {
+.pageAdeverinte h2 {
   margin: 2em 0;
   font-weight: $font-bold;
 }
 
-.containerInvitiations {
+.containerAdeverinte {
   width: 500px;
 
   @include responsive_W750px {

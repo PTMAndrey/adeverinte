@@ -1,20 +1,9 @@
 import React from "react";
 import styles from "./SidebarNavigation.module.scss";
-// import { FaHome } from "react-icons/fa";
-// import { TbLayoutSidebarRightExpandFilled, TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
-// import { FaUserCircle, FaBell } from "react-icons/fa";
-// import { IoIosPeople } from "react-icons/io";
-// import { LiaUsersSolid } from "react-icons/lia";
-// import { GiTeamIdea, GiSkills } from "react-icons/gi";
-// import { FaFolderOpen } from "react-icons/fa6";
-// import { MdOutlineStars } from "react-icons/md";
-// import { BiLogOutCircle } from "react-icons/bi";
-// import { SiPaperspace } from "react-icons/si";
-
 import useAuthProvider from "../../hooks/useAuthProvider";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import useStateProvider from "../../hooks/useStateProvider";
-import { Home, ManageAccountsIcon, ContactMail } from "../../assets/icons/iconsMUI";
+import { Home, ContactMail, GroupsIcon, BusinessIcon, FullscreenIcon, CloseFullscreenIcon, LogoutIcon } from "../../assets/icons/iconsMUI";
 
 
 const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
@@ -25,8 +14,8 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
   const location = useLocation().pathname;
 
   const handleLogout = () => {
-    logout();
     navigate("/login");
+    logout();
   };
 
 
@@ -34,58 +23,68 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
     <div className={`${styles.sidebar} ${isSidebarOpen ? styles.open : styles.closed}`}>
       <div className={styles.headerSideBar}>
         <div className={styles.profileContainer}>
-          {/* <button onClick={toggleSidebar} className={styles.buttonToggleSideBar}>
-            {isSidebarOpen ? <TbLayoutSidebarRightExpandFilled /> : <TbLayoutSidebarLeftExpandFilled />}
-          </button> */}
-          <Link to="/profile/info" className={(location === "/profile/info" || location === "/profile/skills") ? styles.activeMenuProfile : null}>
-            {/* <FaUserCircle className={styles.profileImg} /> */}
-            {isSidebarOpen && <span>Profile</span>}
-          </Link>
+          <button onClick={toggleSidebar} className={styles.buttonToggleSideBar}>
+            {isSidebarOpen ? <CloseFullscreenIcon /> : <FullscreenIcon />}
+          </button>
+          {/* <Link to="/profil/info" className={(location === "/profil/info" || location === "/profil/skills") ? styles.activeMenuProfile : null}>
+            <FaUserCircle className={styles.profileImg} />
+            {isSidebarOpen && <span>Profil</span>}
+          </Link> */}
         </div>
       </div>
       <hr />
       <div className={styles.menuItems}>
         <Link to="/" className={location === "/" ? styles.activeMenuItem : styles.menuItem}>
           <Home className={styles.img} />
-          {isSidebarOpen && <span>Home</span>}
+          {isSidebarOpen && <span>Acasă</span>}
         </Link>
         <hr />
 
+        {user?.idAdministrator !== null &&
+          <>
+            <Link to="/facultate/info" className={location === "/facultate/info" ? styles.activeMenuItem : styles.menuItem} >
+              <BusinessIcon className={styles.img} />
+              {isSidebarOpen && <span>Facultate</span>}
+            </Link>
+            <hr />
+          </>
+        }
 
-        <Link to="/users" className={location === "/users" ? styles.activeMenuItem : styles.menuItem} >
-          {/* <LiaUsersSolid className={styles.img} /> */}
-          {isSidebarOpen && <span>Users</span>}
-        </Link>
-        <hr />
-
-        <Link to="/secretariat" className={location === "/secretariat" ? styles.activeMenuItem : styles.menuItem}>
-          <ManageAccountsIcon className={styles.img} />
-          {isSidebarOpen && <span>Secretariat</span>}
-        </Link>
-        <hr />
-
-        <Link to="/secretariat" className={location === "/secretariat" ? styles.activeMenuItem : styles.menuItem}>
-          <ContactMail className={styles.img} />
-          {isSidebarOpen && <span>Cereri</span>}
-        </Link>
-        <hr />
-
-        <Link to="/studenti" className={location === "/studenti" ? styles.activeMenuItem : styles.menuItem}>
-          {/* <FaBell className={styles.img} /> */}
+        <Link to="/studenti/lista" className={location === "/studenti/lista" ? styles.activeMenuItem : styles.menuItem}>
+          <GroupsIcon className={styles.img} />
           {isSidebarOpen && <span>Studenti</span>}
         </Link>
         <hr />
+        {(!location.includes("/adeverinte/") || location === "/adeverinte/cereri") && <>
+          <Link to="/adeverinte/cereri" className={location === "/adeverinte/cereri" ? styles.activeMenuItem : styles.menuItem}>
+            <ContactMail className={styles.img} />
+            {isSidebarOpen && <span>Adeverinte</span>}
+          </Link>
+          <hr />
+        </>}
 
-        {/* <Link to="/notifications" className={location === "/notifications" ? styles.activeMenuItem : styles.menuItem}>
-          {isSidebarOpen && <span>Notifications</span>}
-        </Link>
-        <hr /> */}
+        {location === "/adeverinte/acceptate" && <>
+          <Link to="/adeverinte/acceptate" className={location === "/adeverinte/acceptate" ? styles.activeMenuItem : styles.menuItem}>
+            <ContactMail className={styles.img} />
+            {isSidebarOpen && <span>Adeverinte</span>}
+          </Link>
+          <hr />
+        </>}
+
+        {location === "/adeverinte/respinse" && <>
+          <Link to="/adeverinte/respinse" className={location === "/adeverinte/respinse" ? styles.activeMenuItem : styles.menuItem}>
+            <ContactMail className={styles.img} />
+            {isSidebarOpen && <span>Adeverinte</span>}
+          </Link>
+          <hr />
+        </>}
+
       </div>
       <hr />
       <div className={styles.bottomSideBar}>
         <button onClick={handleLogout}>
           {/* <BiLogOutCircle className={styles.notificationBell} /> */}
-          {isSidebarOpen && <span>Logout</span>}
+          {isSidebarOpen ? <span><LogoutIcon className={styles.img} /> Logout</span> : <LogoutIcon className={styles.img} />}
         </button>
       </div>
     </div>

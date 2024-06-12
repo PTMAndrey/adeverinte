@@ -49,9 +49,9 @@
 }
 
 .buttonToggleSideBar {
-  position: fixed;
-  top: 5px !important;
-  left: 0 !important;
+  // position: fixed;
+  margin:0 auto;
+  align-items: center;
 }
 
 .headerSideBar {
@@ -59,7 +59,7 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 15%;
+  height: 10%;
 
 }
 
