@@ -42,6 +42,11 @@ import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import Button from '../../../components/Button/Button';
 
+import * as XLSX from 'xlsx'; // Import the xlsx library
+
+
+
+
 const Acceptate = () => {
   const { listaAdeverinteAcceptate, fetchListaAdeverinteAcceptate, facultate } = useStateProvider();
   const { user } = useAuthProvider();
@@ -142,6 +147,33 @@ const Acceptate = () => {
     });
   };
 
+  const generateXLSX = () => {
+    const today = new Date().toLocaleDateString('en-CA');
+    // const filteredRows = rows.filter(row => {
+    //   const registrationDate = row.numarInregistrare.split('/')[1].split(' ')[0];
+    //   console.log(registrationDate); // Debugging line to check the dates
+    //   return registrationDate === today;
+    // });
+  
+    // if (filteredRows.length === 0) {
+    //   alert("Nu există adeverințe generate în ziua curentă.");
+    //   return;
+    // }
+  
+    const reportData = listaAdeverinteAcceptate.map(row => ({
+      'Nr. înregistrare': row.numarInregistrare,
+      'Data înregistrării': row.dataInregistrare,
+      'Solicitant': `${row.student?.nume} ${row.student?.initialaTatalui} ${row.student?.prenume}`,
+      'Adeverință': row.scopAdeverinta,
+    }));
+  
+    const ws = XLSX.utils.json_to_sheet(reportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Raport Adeverințe");
+    XLSX.writeFile(wb, `Raport_Adeverinte_${today}.xlsx`);
+  };
+  
+
   return (
     <section>
       {listaAdeverinteAcceptate?.length === 0 ? (
@@ -151,6 +183,7 @@ const Acceptate = () => {
           <div className={styles.containerAdeverinte}>
             <Button label="Generează adeverințe" onClick={generateDocx} color="primary" />
             <hr/>
+            <Button label="Generează raport" onClick={generateXLSX} color="primary" />
           </div>
           <TableContainer component={Paper} className={styles.table}>
             <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">

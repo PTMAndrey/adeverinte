@@ -66,7 +66,7 @@ function App() {
           {/* protected routes */}
           <Route path="/" element={<Home />} />
 
-          {user?.rol !== 'ADMIN' &&
+          {user?.rol === 'ADMIN' &&
             <Route path="/facultate">
               <Route path="info" element={<Facultate />} />
             </Route>
