@@ -38,32 +38,33 @@ import {
 import { useTheme } from '@emotion/react';
 import PropTypes from 'prop-types';
 
+import { Document, Packer, Paragraph, TextRun } from "docx";
+import { saveAs } from "file-saver";
+import Button from '../../../components/Button/Button';
 
 const Acceptate = () => {
-  const { listaAdeverinteAcceptate, fetchListaAdeverinteAcceptate} = useStateProvider();
+  const { listaAdeverinteAcceptate, fetchListaAdeverinteAcceptate, facultate } = useStateProvider();
   const { user } = useAuthProvider();
 
   useEffect(() => {
     fetchListaAdeverinteAcceptate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  function createData(dataInregistrare, numarInregistrare, emailStudent, scopAdeverinta,emailSecretar) {
-    return { dataInregistrare, numarInregistrare, emailStudent, scopAdeverinta,emailSecretar };
+  function createData(dataInregistrare, numarInregistrare, emailStudent, scopAdeverinta, emailSecretar, student) {
+    return { dataInregistrare, numarInregistrare, emailStudent, scopAdeverinta, emailSecretar, student };
   }
 
   const [rows, setRows] = useState([]);
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(3);
-  const [sortDirection, setSortDirection] = useState('asc'); // 'asc' pentru crescător, 'desc' pentru descrescător
+  const [sortDirection, setSortDirection] = useState('asc');
   const toggleSortDirection = () => {
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
   };
 
   useEffect(() => {
     const sortedAdeverinte = listaAdeverinteAcceptate?.map(adev =>
-      createData(adev.dataInregistrare, adev.numarInregistrare, adev.emailStudent, adev.scopAdeverinta, adev.emailSecretar)
+      createData(adev.dataInregistrare, adev.numarInregistrare, adev.emailStudent, adev.scopAdeverinta, adev.emailSecretar, adev.student)
     ).sort((a, b) => {
       if (sortDirection === 'asc') {
         return a.emailStudent.localeCompare(b.emailStudent);
@@ -74,9 +75,7 @@ const Acceptate = () => {
     setRows(sortedAdeverinte || []);
   }, [listaAdeverinteAcceptate, sortDirection]);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows[0].length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -87,95 +86,151 @@ const Acceptate = () => {
     setPage(0);
   };
 
+
+  const generateDocx = () => {
+    const doc = new Document({
+      sections: [
+        {
+          children: rows.map((row, index) =>
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: "UNIVERSITATEA „ŞTEFAN CEL MARE” DIN SUCEAVA\n",
+                  bold: true,
+                  break: index === 0 ? 0 : 4,
+                }),
+                new TextRun({
+                  text: "FACULTATEA DE INGINERIE ELECTRICĂ ŞI ŞTIINŢA CALCULATOARELOR\n",
+                  bold: true,
+                  break: 2,
+                }),
+                new TextRun({
+                  text: `                                                                                                                                    Nr. ${row?.numarInregistrare.split(' ')[0]}\n`,
+                  break: 2,
+
+                }),
+                new TextRun({
+                  text: "                                                                            A D E V E R I N Ţ Ă\n",
+                  bold: true,
+                  break: 2,
+                }),
+                new TextRun({
+                  text: `Studentul ${row?.student?.nume} ${row?.student?.initialaTatalui} ${row?.student?.prenume} este ${row?.student?.sex.toLowerCase() === 'm' ? "înscris" : "înscrisă"} în anul universitar ${facultate?.anUniversitarCurent}, în anul ${row?.student?.anStudiu} de studii, program de studii - ${row?.student?.cicluDeStudii}: ${row?.student?.numeProgramDeStudiu}, forma de învățământ ${row?.student?.formaDeInvatamant.toLowerCase() === 'zi' ? 'cu frecventa' : row?.student?.formaDeInvatamant.toLowerCase()}, regim: ${row?.student?.formaDeFinantare === 'Buget' ? 'fără taxă' : "cu taxă"}.\n`,
+                  break: 2,
+                }),
+                new TextRun({
+                  text: `Adeverința se eliberează pentru a-i servi la ${row?.scopAdeverinta}.\n`,
+                  break: 1,
+                }),
+                new TextRun({
+                  text: "D E C A N,                                 SECRETAR ȘEF,                                 SECRETARIAT,\n",
+                  break: 2,
+                }),
+                new TextRun({
+                  text: `${facultate?.numeDecan}                                 ${facultate?.numeSecretaraSefa}                                 ${row?.emailSecretar}\n\n`,
+                  break: 2,
+                })
+              ],
+            })
+          ),
+        }
+      ],
+    });
+
+    Packer.toBlob(doc).then(blob => {
+      saveAs(blob, "Adeverinte.docx");
+    });
+  };
+
   return (
     <section>
-      {listaAdeverinteAcceptate?.length === 0 ? <>
+      {listaAdeverinteAcceptate?.length === 0 ? (
         <TableNotFound />
-      </>
-        :
-        <TableContainer component={Paper} className={styles.table}>
-          <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell align="center">Nr. Crt.</StyledTableCell>
-                <StyledTableCell align="center">Data înregistrării</StyledTableCell>
-                <StyledTableCell align="center">Numărul înregistrării</StyledTableCell>
-                <StyledTableCell align="center">
-                  Email student
-                  <IconButton onClick={toggleSortDirection} className={styles.iconWhite}>
-                    {sortDirection === 'asc' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
-                  </IconButton>
-                </StyledTableCell>
-                <StyledTableCell align="center">Scop adeverinta</StyledTableCell>
-                <StyledTableCell align="center">Secretar</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {(rowsPerPage > 0
-                ? rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                : rows
-              )?.map((row, index) => (
-                <TableRow key={index}>
-                  <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell style={{ width: 200 }} align="center">
-                    {row?.dataInregistrare}
-                  </TableCell>
-
-                  <TableCell style={{ width: 200 }} align="center">
-                    {row?.numarInregistrare?.split(' ')[0]}
-                  </TableCell>
-
-                  <TableCell style={{ width: 160 }} align="center">
-                    {row?.emailStudent}
-                  </TableCell>
-
-                  <TableCell style={{ width: 380 }} align="center">
-                    {row?.scopAdeverinta}
-                  </TableCell>
-
-                  <TableCell style={{ width: 380 }} align="center">
-                    {row?.emailSecretar}
-                  </TableCell>
+      ) : (
+        <>
+          <div className={styles.containerAdeverinte}>
+            <Button label="Generează adeverințe" onClick={generateDocx} color="primary" />
+            <hr/>
+          </div>
+          <TableContainer component={Paper} className={styles.table}>
+            <Table sx={{ minWidth: 500 }} aria-label="custom pagination customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center">Nr. Crt.</StyledTableCell>
+                  <StyledTableCell align="center">Data înregistrării</StyledTableCell>
+                  <StyledTableCell align="center">Numărul înregistrării</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Email student
+                    <IconButton onClick={toggleSortDirection} className={styles.iconWhite}>
+                      {sortDirection === 'asc' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
+                    </IconButton>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">Scop adeverinta</StyledTableCell>
+                  <StyledTableCell align="center">Secretar</StyledTableCell>
                 </TableRow>
-              ))}
-
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 53 * emptyRows }}>
-                  <TableCell colSpan={6} />
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  : rows
+                ).map((row, index) => (
+                  <TableRow key={index}>
+                    <TableCell component="th" scope="row" style={{ width: 160 }} align="center">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell style={{ width: 200 }} align="center">
+                      {row.dataInregistrare}
+                    </TableCell>
+                    <TableCell style={{ width: 200 }} align="center">
+                      {row.numarInregistrare.split(' ')[0]}
+                    </TableCell>
+                    <TableCell style={{ width: 160 }} align="center">
+                      {row.emailStudent}
+                    </TableCell>
+                    <TableCell style={{ width: 380 }} align="center">
+                      {row.scopAdeverinta}
+                    </TableCell>
+                    <TableCell style={{ width: 380 }} align="center">
+                      {row.emailSecretar}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[3, 5, 10, { label: 'All', value: -1 }]}
+                    colSpan={5}
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        'aria-label': 'rows per page',
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
                 </TableRow>
-              )}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[3, 5, 10, { label: 'All', value: -1 }]}
-                  colSpan={5}
-                  count={rows?.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    inputProps: {
-                      'aria-label': 'rows per page',
-                    },
-                    native: true,
-                  }}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
-      }
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        </>
+      )}
     </section>
-  )
-}
+  );
+};
+
 
 export default Acceptate;
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
