@@ -15,7 +15,7 @@ import {
 
 
 const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
-  const { logout, user} = useAuthProvider();
+  const { logout, user } = useAuthProvider();
 
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -47,7 +47,7 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
         </Link>
         <hr />
 
-        {user?.rol !== "ADMIN" &&
+        {user?.rol === "ADMIN" &&
           <>
             <Link to="/facultate/info" className={location === "/facultate/info" ? styles.activeMenuItem : styles.menuItem} >
               <BusinessIcon className={styles.img} />
@@ -73,7 +73,7 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
           <hr />
         </>}
 
-        {user?.rol !== "ADMIN" && <>
+        {user?.rol === "ADMIN" && <>
           {(!location.includes("/secretariat/") || location === "/secretariat/lista") && <>
             <Link to="/secretariat/lista" className={location === "/secretariat/lista" ? styles.activeMenuItem : styles.menuItem}>
               <Face2Icon className={styles.img} />
@@ -90,31 +90,36 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
             <hr />
           </>}
         </>}
+        {user?.rol === 'SECRETAR' &&
+          <>
+            {(!location.includes("/adeverinte/") || location === "/adeverinte/cereri") && <>
+              <Link to="/adeverinte/cereri" className={location === "/adeverinte/cereri" ? styles.activeMenuItem : styles.menuItem}>
+                <ContactMail className={styles.img} />
+                {isSidebarOpen && <span>Adeverinte</span>}
+              </Link>
+              <hr />
+            </>}
 
-        {(!location.includes("/adeverinte/") || location === "/adeverinte/cereri") && <>
-          <Link to="/adeverinte/cereri" className={location === "/adeverinte/cereri" ? styles.activeMenuItem : styles.menuItem}>
-            <ContactMail className={styles.img} />
-            {isSidebarOpen && <span>Adeverinte</span>}
-          </Link>
-          <hr />
-        </>}
+            {location === "/adeverinte/acceptate" &&
+              <>
+                <Link to="/adeverinte/acceptate" className={location === "/adeverinte/acceptate" ? styles.activeMenuItem : styles.menuItem}>
+                  <ContactMail className={styles.img} />
+                  {isSidebarOpen && <span>Adeverinte</span>}
+                </Link>
+                <hr />
+              </>}
 
-        {location === "/adeverinte/acceptate" && <>
-          <Link to="/adeverinte/acceptate" className={location === "/adeverinte/acceptate" ? styles.activeMenuItem : styles.menuItem}>
-            <ContactMail className={styles.img} />
-            {isSidebarOpen && <span>Adeverinte</span>}
-          </Link>
-          <hr />
-        </>}
-
-        {location === "/adeverinte/respinse" && <>
-          <Link to="/adeverinte/respinse" className={location === "/adeverinte/respinse" ? styles.activeMenuItem : styles.menuItem}>
-            <ContactMail className={styles.img} />
-            {isSidebarOpen && <span>Adeverinte</span>}
-          </Link>
-          <hr />
-        </>}
-
+            {location === "/adeverinte/respinse" &&
+              <>
+                <Link to="/adeverinte/respinse" className={location === "/adeverinte/respinse" ? styles.activeMenuItem : styles.menuItem}>
+                  <ContactMail className={styles.img} />
+                  {isSidebarOpen && <span>Adeverinte</span>}
+                </Link>
+                <hr />
+              </>
+            }
+          </>
+        }
       </div>
       <hr />
       <div className={styles.bottomSideBar}>

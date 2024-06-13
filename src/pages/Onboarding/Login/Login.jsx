@@ -76,8 +76,10 @@ const Login = () => {
         const response = await loginAdmin(formValue.email, formValue.password);
         if (response.status === 200) {
           //! emailToLog => Id Admin Logged in Session
-          if (rememberMe) localStorage.setItem('emailToLog', response?.data.idAdministrator);
-          else sessionStorage.setItem('emailToLog', response?.data.idAdministrator);
+          if (rememberMe) localStorage.setItem('emailToLog', formValue.email);
+          else sessionStorage.setItem('emailToLog', formValue.email);
+          if (rememberMe) localStorage.setItem('rol', response?.data.rol);
+          else sessionStorage.setItem('rol', response?.data.rol);
           setUser(response?.data);
           navigate("/");
 
@@ -113,11 +115,15 @@ const Login = () => {
         if (response?.data.rol === 'SECRETAR') {
           if (rememberMe) localStorage.setItem('emailToLog', response?.data.emailSecretar);
           else sessionStorage.setItem('emailToLog', response?.data.emailSecretar);
+          if (rememberMe) localStorage.setItem('rol', response?.data.rol);
+          else sessionStorage.setItem('rol', response?.data.rol);
           setUser(response?.data);
         }
         if (response?.data.rol === 'STUDENT') {
-          if (rememberMe) localStorage.setItem('emailToLog', response?.data.emailStudent);
-          else sessionStorage.setItem('emailToLog', response?.data.emailStudent);
+          if (rememberMe) localStorage.removeItem('emailToLog', response?.data.emailStudent);
+          else sessionStorage.removeItem('emailToLog', response?.data.emailStudent);
+          if (rememberMe) localStorage.removeItem('rol', response?.data.rol);
+          else sessionStorage.removeItem('rol', response?.data.rol);
           setUser(response?.data);
           console.log(response?.data, objDecoded, token)
 

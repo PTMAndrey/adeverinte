@@ -12,11 +12,11 @@ axios.defaults.headers = {
 // ---------------------------- Calls ----------------------------------
 export const loginAdmin = async (email, password) => {
   try {
-    const response = await axios.post('/auth/administrator/login?email='+email+'&parola='+password);
+    const response = await axios.post('/auth/administrator/login?email=' + email + '&parola=' + password);
     return response;
   } catch (error) {
     if (error.response) {
-      throw new Error(error.response.data|| "Something went wrong... Try again later");
+      throw new Error(error.response.data || "Something went wrong... Try again later");
 
     } else {
       throw new Error("Network error or other issue");
@@ -25,24 +25,24 @@ export const loginAdmin = async (email, password) => {
 };
 
 export const login = async (email) => {
-    try {
-      const response = await axios.post('/auth/login?email='+email);
-      if (response.data.jwt === '')
-        return null;
-      else
-        return response;
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response);
-        throw new Error(error.response.data|| "Something went wrong... Try again later");
-  
-      } else {
-        throw new Error("Network error or other issue");
-      }
+  try {
+    const response = await axios.post('/auth/login?email=' + email);
+    if (response.data.jwt === '')
+      return null;
+    else
+      return response;
+  } catch (error) {
+    if (error.response) {
+      console.log(error.response);
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
     }
-  };
-  
-  
+  }
+};
+
+
 // get admin by id
 export const getAdminByEmail = async (email) => {
   try {
@@ -133,28 +133,96 @@ export const getAllSecretari = async () => {
   }
 };
 
-
-
-// export const sendEmail = async (data) => {
-//   try {
-//     const response = await axios.post('/email/send', data);
-//     return response;
-//   } catch (error) {
-//     if (error.response) {
-//       throw new Error(error.response.data || "Something went wrong... Try again later");
-
-//     } else {
-//       throw new Error("Network error or other issue");
-//     }
-//   }
-// };
-
-
- 
 // get facultate
 export const getFacultate = async () => {
   try {
     const response = await axios.get("/facultate/getAll");
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+export const getCereriAdeverinte = async () => {
+  try {
+    const response = await axios.get("/api/google-sheets/new-entries");
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+export const isFirstProcessedToday = async () => {
+  try {
+    const response = await axios.get("/adeverinta/isFirstProcessedToday");
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+export const aproveCerereAdeverinta = async (nrInreg, emailSecretar, data) => {
+  try {
+    const response = await axios.post('/adeverinta/approve?nrInregistrare=' + nrInreg + "&emailSecretar=" + emailSecretar, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+export const rejectCerereAdeverinta = async (motiv, emailSecretar, data) => {
+  try {
+    const response = await axios.post('/adeverinta/reject?motivRespingere=' + motiv + "&emailSecretar=" + emailSecretar, data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+export const getAdeverinteAcceptate = async () => {
+  try {
+    const response = await axios.get("/adeverinta/approved");
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+export const getAdeverinteRespinse = async () => {
+  try {
+    const response = await axios.get("/adeverinta/rejected");
     return response;
   } catch (error) {
     if (error.response) {

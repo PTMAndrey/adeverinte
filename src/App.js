@@ -76,19 +76,19 @@ function App() {
             <Route path="adauga" element={<Studenti />} />
           </Route>
 
-          {user?.rol !== 'ADMIN' &&
+          {user?.rol === 'ADMIN' &&
             <Route path="/secretariat">
               <Route path="lista" element={<Secretariat />} />
               <Route path="adauga" element={<Secretariat />} />
             </Route>
           }
-
-          <Route path="/adeverinte">
-            <Route path="cereri" element={<Adeverinte />} />
-            <Route path="acceptate" element={<Adeverinte />} />
-            <Route path="respinse" element={<Adeverinte />} />
-          </Route>
-
+          {user?.rol === 'SECRETAR' &&
+            <Route path="/adeverinte">
+              <Route path="cereri" element={<Adeverinte />} />
+              <Route path="acceptate" element={<Adeverinte />} />
+              <Route path="respinse" element={<Adeverinte />} />
+            </Route>
+          }
         </Route>
 
         <Route

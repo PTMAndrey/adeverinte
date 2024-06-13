@@ -19,12 +19,25 @@ export const AuthProvider = ({ children }) => {
   function logout() {
     sessionStorage.removeItem("emailToLog")
     localStorage.removeItem("emailToLog")
+    
+    sessionStorage.removeItem("rol")
+    localStorage.removeItem("rol")
     setUser(null);
+    window.location.reload();
   }
 
   useEffect(() => {
     if (!user && userIsLogged) {
-      fetchUser(userIsLogged);
+      const rolUser =
+        rememberMe || !!localStorage.getItem("rol")
+          ? localStorage.getItem('rol')
+          :
+          sessionStorage.getItem('rol');
+      if (rolUser === 'ADMIN')
+        fetchUser(userIsLogged);
+      else
+        if (rolUser === 'SECRETAR')
+          fetchSecretar(userIsLogged);
     }
   }, [userIsLogged])
 
@@ -35,21 +48,22 @@ export const AuthProvider = ({ children }) => {
         setUser(response.data);
       }
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        try {
-          const response = await getSecretarByEmail(email);
-          console.log(response.data);
-          if (response.status === 200) {
-            setUser(response.data);
-          }
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      } else {
-        console.error("Error fetching data:", error);
-      }
+      console.error("Error fetching data:", error);
     }
   };
+
+  const fetchSecretar = async (email) => {
+    try {
+      const response = await getSecretarByEmail(email);
+      console.log(response.data);
+      if (response.status === 200) {
+        setUser(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
 
   return (
     <AuthContext.Provider
@@ -61,6 +75,7 @@ export const AuthProvider = ({ children }) => {
         isLoggedIn,
         userIsLogged,
         fetchUser,
+        fetchSecretar,
         logout,
       }}
     >
