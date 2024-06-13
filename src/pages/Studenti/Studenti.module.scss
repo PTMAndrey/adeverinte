@@ -1,7 +1,7 @@
 @import "../../styles/variables.scss";
 @import "../../styles/mixins.scss";
 
-.containerInvitiations {
+.containerAddFile {
   width: 500px;
 
   @include responsive_W750px {
@@ -58,25 +58,12 @@
 
 }
 
-.refreshTable {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-
-}
-
-
 .tableButtons {
   cursor: pointer;
 
   @include responsive_W550px {
     font-size: 17px !important;
   }
-}
-
-.allEmployeesButtonsAction {
-  display: flex;
-  justify-content: space-evenly;
 }
 
 .authError {
@@ -96,46 +83,14 @@
   margin-top: 30px;
 }
 
-.cardButtons {
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.sortButtonCard {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background-color: $color-primary-300;
-  color: $color-white !important;
-  margin-bottom: 20px;
-
-  p {
-    padding: 5px;
-    font-size: $font-body-small;
-  }
-}
-
-.listOfRoles {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  li {
-    padding: 5px 0;
-  }
-
-  @include responsive_W550px {
-    align-items: baseline;
-  }
-}
 
 // invitations
-.pageInvitations h2 {
+.pageAdauga h2 {
   margin: 2em 0;
   font-weight: $font-bold;
 }
 
-.containerInvitiations {
+.containerAddFile {
   width: 500px;
 
   @include responsive_W750px {

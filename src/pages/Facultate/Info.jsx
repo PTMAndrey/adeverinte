@@ -42,20 +42,48 @@ const Info = () => {
     const handleCancel = () => {
         setActiveForm("");
         setFormValue({
-            organisationHeadquarterAddress: '',
+            numeCompletFacultate: facultate?.numeCompletFacultate || "",
+            numeScurtFacultate: facultate?.numeScurtFacultate || "",
+            anUniversitarCurent: facultate?.anUniversitarCurent || "",
+            numeDecan: facultate?.numeDecan || "",
+            numeSecretaraSefa: facultate?.numeSecretaraSefa || "",
         });
 
     };
     const clearText = () => {
         setFormValue({
-            organisationHeadquarterAddress: '',
+            numeCompletFacultate: facultate?.numeCompletFacultate || "",
+            numeScurtFacultate: facultate?.numeScurtFacultate || "",
+            anUniversitarCurent: facultate?.anUniversitarCurent || "",
+            numeDecan: facultate?.numeDecan || "",
+            numeSecretaraSefa: facultate?.numeSecretaraSefa || "",
         });
 
     };
 
     // isFormValid
     const isFormValid = (field) => {
-        if (field === "organisationHeadquarterAddress") {
+        if (field === "numeCompletFacultate") {
+            if (formValue[field].length > 9) {
+                return true;
+            }
+        }
+        if (field === "numeScurtFacultate") {
+            if (formValue[field].length > 1) {
+                return true;
+            }
+        }
+        if (field === "anUniversitarCurent") {
+            if (formValue[field].length > 8) {
+                return true;
+            }
+        }
+        if (field === "numeDecan") {
+            if (formValue[field].length > 9) {
+                return true;
+            }
+        }
+        if (field === "numeSecretaraSefa") {
             if (formValue[field].length > 9) {
                 return true;
             }
@@ -101,13 +129,13 @@ const Info = () => {
                 <div>
                     <RowItem
                         // icon={<CiUser />}
-                        title="Full name"
+                        title="Nume"
                         info={user?.nume + ' ' + user?.prenume}
                     />
                     <RowItem
                         // icon={<MdOutlineEmail />}
                         title="Email"
-                        info={user?.emailAdministrator || user?.emailSecretar}
+                        info={user?.emailAdministrator !== null || user?.emailSecretar}
                     />
 
                     <RowItem

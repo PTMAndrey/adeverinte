@@ -15,6 +15,11 @@ export const getLinksForRoute = (user, segment) => {
         { text: 'Studenti', path: '/studenti/lista' },
         { text: 'Adaugă', path: '/studenti/adauga' },
       ];
+      case 'secretariat':
+        return [
+          { text: 'Secretariat', path: '/secretariat/lista' },
+          { text: 'Adaugă', path: '/secretariat/adauga' },
+        ];
     case 'adeverinte':
       return [
         { text: 'Cereri', path: '/adeverinte/cereri' },

@@ -1,39 +1,39 @@
-// import React from 'react'
-// import useStateProvider from '../../hooks/useStateProvider';
-// import styles from './Adeverinte.module.scss';
+import React from 'react'
+import useStateProvider from '../../../hooks/useStateProvider';
+import styles from './Adeverinte.module.scss';
 
-// const Cereri = () => {
-  
-//   return (
-//     <div className={styles.homeContainer}>
-//       <br></br>
-//       <h3>Cereri de adeverinte</h3>
-//       {cereriAdeverinte?.length > 0 && (
-//         <table className={styles.styledTable}>
-//           <thead>
-//             <tr>
-//               {cereriAdeverinte[0]?.map((heading, index) => (
-//                 <th key={index}>{heading}</th>
-//               ))}
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {cereriAdeverinte?.slice(1).map((row, index) => (
-//               <tr key={index}>
-//                 {row.map((cell, i) => (
-//                   <td key={i}>{cell}</td>
-//                 ))}
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
-//       )}
+const Cereri = () => {
+  const {cereriAdeverinte} = useStateProvider();
+  return (
+    <div className={styles.homeContainer}>
+      <br></br>
+      <h3>Cereri de adeverinte</h3>
+      {cereriAdeverinte?.length > 0 && (
+        <table className={styles.styledTable}>
+          <thead>
+            <tr>
+              {cereriAdeverinte[0]?.map((heading, index) => (
+                <th key={index}>{heading}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {cereriAdeverinte?.slice(1).map((row, index) => (
+              <tr key={index}>
+                {row.map((cell, i) => (
+                  <td key={i}>{cell}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
-//     </div>
-//   )
-// }
+    </div>
+  )
+}
 
-// export default Cereri
+export default Cereri
 
 
 
@@ -635,12 +635,12 @@
 //   rowsPerPage: PropTypes.number.isRequired,
 // };
 
-import React from 'react'
+// import React from 'react'
 
-const Cereri = () => {
-  return (
-    <div>Cereri</div>
-  )
-}
+// const Cereri = () => {
+//   return (
+//     <div>Cereri</div>
+//   )
+// }
 
-export default Cereri
+// export default Cereri

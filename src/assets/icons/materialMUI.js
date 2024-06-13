@@ -20,3 +20,5 @@ export { default as Avatar } from '@mui/material/Avatar';
 export { default as Stack } from '@mui/material/Stack';
 export { default as Chip } from '@mui/material/Chip';
 export { default as Divider } from '@mui/material/Divider';
+export { default as Modal } from '@mui/material/Modal';
+export { default as Button } from '@mui/material/Button';

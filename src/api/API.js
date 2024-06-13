@@ -44,9 +44,9 @@ export const login = async (email) => {
   
   
 // get admin by id
-export const getAdminByID = async (id) => {
+export const getAdminByEmail = async (email) => {
   try {
-    const response = await axios.get("/administrator/get/" + id);
+    const response = await axios.get("/administrator/get/" + email);
     return response;
   } catch (error) {
     if (error.response) {
@@ -58,6 +58,20 @@ export const getAdminByID = async (id) => {
   }
 };
 
+
+export const getSecretarByEmail = async (email) => {
+  try {
+    const response = await axios.get("/secretar/get/" + email);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
 
 
 export const addStudents = async (data) => {
@@ -73,6 +87,52 @@ export const addStudents = async (data) => {
     }
   }
 };
+
+export const addListSecretari = async (data) => {
+  try {
+    const response = await axios.post('/secretar/addMultiple', data);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+// get studenti
+export const getAllStudenti = async () => {
+  try {
+    const response = await axios.get("/student/getAll");
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
+
+// get secretari
+export const getAllSecretari = async () => {
+  try {
+    const response = await axios.get("/secretar/getAll");
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data || "Something went wrong... Try again later");
+
+    } else {
+      throw new Error("Network error or other issue");
+    }
+  }
+};
+
 
 
 // export const sendEmail = async (data) => {
@@ -95,22 +155,6 @@ export const addStudents = async (data) => {
 export const getFacultate = async () => {
   try {
     const response = await axios.get("/facultate/getAll");
-    return response;
-  } catch (error) {
-    if (error.response) {
-      throw new Error(error.response.data || "Something went wrong... Try again later");
-
-    } else {
-      throw new Error("Network error or other issue");
-    }
-  }
-};
-
- 
-// get facultate
-export const getSecretar = async () => {
-  try {
-    const response = await axios.get("/secretar/getAll");
     return response;
   } catch (error) {
     if (error.response) {

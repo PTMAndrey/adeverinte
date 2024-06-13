@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import styles from './Studenti.module.scss';
+import styles from './Secretariat.module.scss';
 // import { addTeamRoles, deleteTeamRoles, updateTeamRoles } from '../../api/API';
-import TableNotFound from '../../components/Table/TableNotFound'
-import Button from '../../components/Button/Button'
-import Modal from '../../components/Modal/Modal';
-import Input from '../../components/Input/Input'
-import useStateProvider from '../../hooks/useStateProvider'
-import useAuthProvider from '../../hooks/useAuthProvider';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import TableNotFound from '../../../components/Table/TableNotFound'
+import Button from '../../../components/Button/Button'
+import Modal from '../../../components/Modal/Modal';
+import Input from '../../../components/Input/Input'
+import useStateProvider from '../../../hooks/useStateProvider'
+import useAuthProvider from '../../../hooks/useAuthProvider';
+import useWindowDimensions from '../../../hooks/useWindowDimensions';
 
 import {
     styled,
@@ -25,7 +25,7 @@ import {
     TableFooter,
     TablePagination,
     Tooltip
-} from '../../assets/icons/materialMUI';
+} from '../../../assets/icons/materialMUI';
 
 import {
     FirstPageIcon,
@@ -37,14 +37,14 @@ import {
     BorderColorIcon,
     TextRotationAngleupIcon,
     TextRotationAngledownIcon
-} from '../../assets/icons/iconsMUI';
+} from '../../../assets/icons/iconsMUI';
 
 import { useTheme } from '@emotion/react';
 import PropTypes from 'prop-types';
 
 
 const List = () => {
-    const { listaStudenti, fetchListaStudenti, currentPageStudenti, pageSize } = useStateProvider();
+    const { listaSecretari, fetchListaSecretari, currentPageSecretari, pageSizeSecretariat } = useStateProvider();
     const { user } = useAuthProvider();
     const { width } = useWindowDimensions();
 
@@ -55,7 +55,7 @@ const List = () => {
     const [openDelete, setOpenDelete] = useState(false);
 
     useEffect(() => {
-        fetchListaStudenti();
+        fetchListaSecretari();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
@@ -152,8 +152,8 @@ const List = () => {
         // }
     }
 
-    function createData(emailStudent, nume, initialaTatalui, prenume, cicluDeStudii, anStudiu, formaDeInvatamant, formaDeFinantare, sex, numeProgramDeStudiu) {
-        return { emailStudent, nume, initialaTatalui, prenume, cicluDeStudii, anStudiu, formaDeInvatamant, formaDeFinantare, sex, numeProgramDeStudiu };
+    function createData(emailSecretar, nume, prenume, titlu, numeProgramDeStudiu) {
+        return { emailSecretar, nume, prenume, titlu, numeProgramDeStudiu };
     }
 
     const [rows, setRows] = useState([]);
@@ -166,8 +166,8 @@ const List = () => {
     };
 
     useEffect(() => {
-        const sortedStudenti = listaStudenti?.map(stud =>
-            createData(stud.emailStudent, stud.nume, stud.initialaTatalui, stud.prenume, stud.cicluDeStudii, stud.anStudiu, stud.formaDeInvatamant, stud.formaDeFinantare, stud.sex, stud.numeProgramDeStudiu)
+        const sortedSecretari = listaSecretari?.map(stud =>
+            createData(stud.emailSecretar, stud.nume, stud.prenume, stud.titlu, stud.numeProgramDeStudiu)
         ).sort((a, b) => {
             if (sortDirection === 'asc') {
                 return a.nume.localeCompare(b.nume);
@@ -175,8 +175,8 @@ const List = () => {
                 return b.nume.localeCompare(a.nume);
             }
         });
-        setRows(sortedStudenti || []);
-    }, [listaStudenti, sortDirection]);
+        setRows(sortedSecretari || []);
+    }, [listaSecretari, sortDirection]);
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -190,10 +190,10 @@ const List = () => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-    
+
     return (
-        <section className={styles.pageTeamRoles}>
-            {listaStudenti?.length === 0 ? <>
+        <section className={styles.pageList}>
+            {listaSecretari?.length === 0 ? <>
                 <TableNotFound />
             </>
                 :
@@ -203,20 +203,15 @@ const List = () => {
                             <TableRow>
                                 <StyledTableCell align="center">Nr. Crt.</StyledTableCell>
                                 <StyledTableCell align="center">Email</StyledTableCell>
+                                <StyledTableCell align="center">Titlu</StyledTableCell>
                                 <StyledTableCell align="center">
                                     Nume
                                     <IconButton onClick={toggleSortDirection} className={styles.iconWhite}>
                                         {sortDirection === 'asc' ? <TextRotationAngledownIcon /> : <TextRotationAngleupIcon />}
                                     </IconButton>
                                 </StyledTableCell>
-                                <StyledTableCell align="center">Initiala tatălui</StyledTableCell>
                                 <StyledTableCell align="center">Prenume</StyledTableCell>
-                                <StyledTableCell align="center">Studii</StyledTableCell>
                                 <StyledTableCell align="center">Program de studiu</StyledTableCell>
-                                <StyledTableCell align="center">An</StyledTableCell>
-                                <StyledTableCell align="center">Formă învățământ</StyledTableCell>
-                                <StyledTableCell align="center">Finanțare</StyledTableCell>
-                                <StyledTableCell align="center">Sex</StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -229,7 +224,11 @@ const List = () => {
                                         {index + 1}
                                     </TableCell>
                                     <TableCell style={{ width: 160 }} align="center">
-                                        {row?.emailStudent}
+                                        {row?.emailSecretar}
+                                    </TableCell>
+
+                                    <TableCell style={{ width: 160 }} align="center">
+                                        {row?.titlu}
                                     </TableCell>
 
                                     <TableCell style={{ width: 160 }} align="center">
@@ -237,35 +236,11 @@ const List = () => {
                                     </TableCell>
 
                                     <TableCell style={{ width: 160 }} align="center">
-                                        {row?.initialaTatalui}
-                                    </TableCell>
-
-                                    <TableCell style={{ width: 160 }} align="center">
                                         {row?.prenume}
                                     </TableCell>
 
                                     <TableCell style={{ width: 160 }} align="center">
-                                        {row?.cicluDeStudii}
-                                    </TableCell>
-
-                                    <TableCell style={{ width: 160 }} align="center">
                                         {row?.numeProgramDeStudiu}
-                                    </TableCell>
-
-                                    <TableCell style={{ width: 160 }} align="center">
-                                        {row?.anStudiu}
-                                    </TableCell>
-
-                                    <TableCell style={{ width: 160 }} align="center">
-                                        {row?.formaDeInvatamant}
-                                    </TableCell>
-
-                                    <TableCell style={{ width: 160 }} align="center">
-                                        {row?.formaDeFinantare}
-                                    </TableCell>
-
-                                    <TableCell style={{ width: 160 }} align="center">
-                                        {row?.sex}
                                     </TableCell>
                                 </TableRow>
                             ))}

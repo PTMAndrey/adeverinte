@@ -1,20 +1,18 @@
 import React, { useCallback, useState } from 'react';
-import styles from "./Studenti.module.scss";
+import styles from "./Secretariat.module.scss";
 import { Container } from 'react-bootstrap';
-import Input from '../../components/Input/Input';
-import Button from '../../components/Button/Button';
+import Input from '../../../components/Input/Input';
+import Button from '../../../components/Button/Button';
 import { useDropzone } from 'react-dropzone';
 import * as XLSX from 'xlsx';
-import useStateProvider from '../../hooks/useStateProvider';
-import useAuthProvider from '../../hooks/useAuthProvider';
-import { addStudents, sendEmail } from '../../api/API';
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { ContentCopyIcon } from '../../assets/icons/iconsMUI';
+import useStateProvider from '../../../hooks/useStateProvider';
+import useAuthProvider from '../../../hooks/useAuthProvider';
+import { addListSecretari } from '../../../api/API';
 
 const Adauga = () => {
     const { setAlert } = useStateProvider();
     const { user } = useAuthProvider();
-    const [emailList, setEmailList] = useState([]);
+    const [listaSecretari, setListaSecretari] = useState([]);
     const [uploadedFile, setUploadedFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -33,78 +31,56 @@ const Adauga = () => {
             const headers = json[0];
             const rows = json.slice(1);
 
-            const emailObjects = [];
+            const excelRowObjects = [];
 
             for (let row of rows) {
                 if (row.every(cell => cell === null || cell === "")) break;
-                let emailObject = {
-                    "emailStudent": "",
+                let rowObject = {
+                    "emailSecretar": "",
                     "nume": "",
-                    "initialaTatalui": "",
                     "prenume": "",
-                    "cicluDeStudii": "",
-                    "anStudiu": "",
-                    "formaDeInvatamant": "",
-                    "formaDeFinantare": "",
+                    "titlu": "",
                     "numeProgramDeStudiu": "",
-                    "sex": ""
                 };
                 headers.forEach((header, index) => {
                     switch (header.trim().toLowerCase()) {
                         case 'email':
-                        case 'emailstudent':
-                            emailObject.emailStudent = row[index] || "";
+                        case 'email secretar':
+                            rowObject.emailSecretar = row[index] || "";
                             break;
                         case 'nume':
-                            emailObject.nume = row[index] || "";
-                            break;
-                        case 'initiala tatalui':
-                            emailObject.initialaTatalui = row[index] || "";
+                            rowObject.nume = row[index] || "";
                             break;
                         case 'prenume':
-                            emailObject.prenume = row[index] || "";
+                            rowObject.prenume = row[index] || "";
                             break;
-                        case 'ciclu de studii':
-                            emailObject.cicluDeStudii = row[index] || "";
-                            break;
-                        case 'an de studiu':
-                            emailObject.anStudiu = row[index] || "";
-                            break;
-                        case 'forma de invatamant':
-                            emailObject.formaDeInvatamant = row[index] || "";
-                            break;
-                        case 'forma de finanțare ( buget | taxă )':
-                            emailObject.formaDeFinantare = row[index] || "";
+                        case 'titlu':
+                            rowObject.titlu = row[index] || "";
                             break;
                         case 'nume program de studiu':
-                            emailObject.numeProgramDeStudiu = row[index] || "";
-                            break;
-                        case 'sex ( m | f )':
-                            emailObject.sex = row[index] || "";
+                            rowObject.numeProgramDeStudiu = row[index] || "";
                             break;
                         default:
                             break;
                     }
                 });
-                emailObjects.push(emailObject);
+                excelRowObjects.push(rowObject);
             }
-
-            setEmailList(emailObjects);
+            console.log(excelRowObjects);
+            setListaSecretari(excelRowObjects);
         };
         reader.readAsArrayBuffer(file);
     }, []);
 
     const handleCancelFile = () => {
         setUploadedFile(null);
-        setEmailList([]);
+        setListaSecretari([]);
     };
 
-    const addStudenti = async () => {
+    const addSecretari = async () => {
         setIsLoading(true);
         try {
-            console.log('Sending emails:', emailList);
-
-            const resp = await addStudents(emailList);
+            const resp = await addListSecretari(listaSecretari);
             if (resp.status === 200) {
                 setAlert({ type: 'success', message: 'Fisier adaugat cu succes!' });
                 handleCancelFile();
@@ -117,18 +93,17 @@ const Adauga = () => {
         }
     };
     const handleDownloadFile = () => {
-        const url = '/Model_Adaugare_Studenti.xlsx';
+        const url = '/Model_Adaugare_Secretari.xlsx';
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'Model_Adaugare_Studenti.xlsx');
+        link.setAttribute('download', 'Model_Adaugare_Secretari.xlsx');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         setAlert({ type: 'success', message: 'Fisier descarcat cu succes!' })
     };
     return (
-
-        <Container fluid className={styles.pageAdauga}>
+        <Container fluid>
             <div className={styles.containerAddFile}>
                 <Button
                     variant="destructive"
@@ -138,7 +113,8 @@ const Adauga = () => {
                 <hr />
             </div>
             <div className={styles.containerAddFile}>
-                <p>Doar fișiere cu extensia ( *.xlsx ) sunt acceptate</p>
+                <p>Adaugă fișierul cu toate câmpurile completate în zona marcată</p>
+                <small>Doar fișiere cu extensia ( *.xlsx ) sunt acceptate</small>
                 <Dropzone onDrop={handleFileUpload} />
                 {
                     uploadedFile && (
@@ -154,9 +130,9 @@ const Adauga = () => {
                     ) : (
                         <Button
                             variant="primary"
-                            label="Adaugă studenți"
-                            disabled={emailList.length === 0 || isLoading}
-                            onClick={addStudenti}
+                            label="Adaugă secretari"
+                            disabled={listaSecretari.length === 0 || isLoading}
+                            onClick={addSecretari}
                         />
                     )
                 }

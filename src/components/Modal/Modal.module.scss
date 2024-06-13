@@ -1,0 +1,19 @@
+
+.modalButtons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+#parent-modal-title{
+    font-weight: bold;
+}
+
+#parent-modal-description {
+    display: flex; 
+    flex-wrap: wrap;
+    gap: 8px; 
+    padding: 8px !important;
+    margin: -8px;
+}

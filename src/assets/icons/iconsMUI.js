@@ -28,3 +28,4 @@ export { default as BusinessIcon } from '@mui/icons-material/Business';
 export { default as CloseFullscreenIcon } from '@mui/icons-material/CloseFullscreen';
 export { default as FullscreenIcon } from '@mui/icons-material/Fullscreen';
 export { default as LogoutIcon } from '@mui/icons-material/Logout';
+export { default as Face2Icon } from '@mui/icons-material/Face2';

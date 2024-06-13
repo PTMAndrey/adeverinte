@@ -1,12 +1,9 @@
 import { createContext, useEffect, useState } from "react";
-import { getFacultate } from "../api/API";
+import { getAllSecretari, getAllStudenti, getFacultate } from "../api/API";
 
 const StateContext = createContext({});
 
 export const StateProvider = ({ children }) => {
-
-  let pageSize = 3;
-  // alert
   const [alert, setAlert] = useState(null);
   if (alert) {
     setTimeout(() => {
@@ -31,6 +28,7 @@ export const StateProvider = ({ children }) => {
 
   useEffect(() => {
     fetchCereriAdeverinte();
+    fetchFacultate();
   }, []);
 
   const [facultate, setFacultate] = useState(null);
@@ -39,7 +37,8 @@ export const StateProvider = ({ children }) => {
     try {
       const response = await getFacultate();
       if (response?.status === 200) {
-        setFacultate(response.data[0])
+        setFacultate(response.data[0]);
+        console.log(response.data[0]);
       }
     } catch (error) {
       console.log(error.message, "error");
@@ -49,6 +48,48 @@ export const StateProvider = ({ children }) => {
       });
     }
   };
+
+
+  const [listaStudenti, setListaStudenti] = useState(null);
+  let pageSize = 3;
+  const [currentPageStudenti, setCurrentPageStudenti] = useState(1);
+
+  const fetchListaStudenti = async () => {
+    try {
+      const response = await getAllStudenti();
+      if (response?.status === 200) {
+        setListaStudenti(response.data)
+      }
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message || "Something went wrong...", // Use the error message from the catch
+      });
+    }
+  };
+
+
+  const [listaSecretari, setListaSecretari] = useState(null);
+  let pageSizeSecretariat = 3;
+  const [currentPageSecretari, setCurrentPageSecretari] = useState(1);
+
+  const fetchListaSecretari = async () => {
+    try {
+      const response = await getAllSecretari();
+      if (response?.status === 200) {
+        setListaSecretari(response.data)
+      }
+    } catch (error) {
+      console.log(error.message, "error");
+      setAlert({
+        type: "danger",
+        message: error.message || "Something went wrong...", // Use the error message from the catch
+      });
+    }
+  };
+
+
   return <StateContext.Provider
     value={{
       alert,
@@ -59,6 +100,17 @@ export const StateProvider = ({ children }) => {
       facultate,
       setFacultate,
       fetchFacultate,
+      listaStudenti,
+      setListaStudenti,
+      fetchListaStudenti,
+      currentPageStudenti,
+      setCurrentPageStudenti,
+      pageSizeSecretariat,
+      listaSecretari,
+      setListaSecretari,
+      currentPageSecretari,
+      setCurrentPageSecretari,
+      fetchListaSecretari,
     }}
   >{children}</StateContext.Provider>;
 };

@@ -2,13 +2,20 @@ import React from "react";
 import styles from "./SidebarNavigation.module.scss";
 import useAuthProvider from "../../hooks/useAuthProvider";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import useStateProvider from "../../hooks/useStateProvider";
-import { Home, ContactMail, GroupsIcon, BusinessIcon, FullscreenIcon, CloseFullscreenIcon, LogoutIcon } from "../../assets/icons/iconsMUI";
+import {
+  Home,
+  ContactMail,
+  GroupsIcon,
+  BusinessIcon,
+  FullscreenIcon,
+  CloseFullscreenIcon,
+  LogoutIcon,
+  Face2Icon
+} from "../../assets/icons/iconsMUI";
 
 
 const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
-  const { logout } = useAuthProvider();
-  const { user } = useAuthProvider();
+  const { logout, user} = useAuthProvider();
 
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -40,7 +47,7 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
         </Link>
         <hr />
 
-        {user?.idAdministrator !== null &&
+        {user?.rol !== "ADMIN" &&
           <>
             <Link to="/facultate/info" className={location === "/facultate/info" ? styles.activeMenuItem : styles.menuItem} >
               <BusinessIcon className={styles.img} />
@@ -50,11 +57,40 @@ const SidebarNavigation = ({ toggleSidebar, isSidebarOpen }) => {
           </>
         }
 
-        <Link to="/studenti/lista" className={location === "/studenti/lista" ? styles.activeMenuItem : styles.menuItem}>
-          <GroupsIcon className={styles.img} />
-          {isSidebarOpen && <span>Studenti</span>}
-        </Link>
-        <hr />
+        {(!location.includes("/studenti/") || location === "/studenti/lista") && <>
+          <Link to="/studenti/lista" className={location === "/studenti/lista" ? styles.activeMenuItem : styles.menuItem}>
+            <GroupsIcon className={styles.img} />
+            {isSidebarOpen && <span>Studenti</span>}
+          </Link>
+          <hr />
+        </>}
+
+        {location === "/studenti/adauga" && <>
+          <Link to="/studenti/adauga" className={location === "/studenti/adauga" ? styles.activeMenuItem : styles.menuItem}>
+            <GroupsIcon className={styles.img} />
+            {isSidebarOpen && <span>Studenti</span>}
+          </Link>
+          <hr />
+        </>}
+
+        {user?.rol !== "ADMIN" && <>
+          {(!location.includes("/secretariat/") || location === "/secretariat/lista") && <>
+            <Link to="/secretariat/lista" className={location === "/secretariat/lista" ? styles.activeMenuItem : styles.menuItem}>
+              <Face2Icon className={styles.img} />
+              {isSidebarOpen && <span>Secretariat</span>}
+            </Link>
+            <hr />
+          </>}
+
+          {location === "/secretariat/adauga" && <>
+            <Link to="/secretariat/adauga" className={location === "/secretariat/adauga" ? styles.activeMenuItem : styles.menuItem}>
+              <Face2Icon className={styles.img} />
+              {isSidebarOpen && <span>Secretariat</span>}
+            </Link>
+            <hr />
+          </>}
+        </>}
+
         {(!location.includes("/adeverinte/") || location === "/adeverinte/cereri") && <>
           <Link to="/adeverinte/cereri" className={location === "/adeverinte/cereri" ? styles.activeMenuItem : styles.menuItem}>
             <ContactMail className={styles.img} />

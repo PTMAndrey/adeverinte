@@ -20,9 +20,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SidebarNavigation from './components/Sidebar/SidebarNavigation';
 import Studenti from './pages/Studenti/Studenti';
-import Profile from './pages/Profile/Profile';
 import Adeverinte from './pages/Secretariat/Adeverinte/Adeverinte';
 import Facultate from './pages/Facultate/Facultate';
+import Secretariat from './pages/Secretariat/Secretare/Secretariat';
 
 
 function App() {
@@ -65,9 +65,7 @@ function App() {
         >
           {/* protected routes */}
           <Route path="/" element={<Home />} />
-          <Route path="/profil">
-            <Route path="info" element={<Profile />} />
-          </Route>
+
           {user?.rol !== 'ADMIN' &&
             <Route path="/facultate">
               <Route path="info" element={<Facultate />} />
@@ -77,6 +75,13 @@ function App() {
             <Route path="lista" element={<Studenti />} />
             <Route path="adauga" element={<Studenti />} />
           </Route>
+
+          {user?.rol !== 'ADMIN' &&
+            <Route path="/secretariat">
+              <Route path="lista" element={<Secretariat />} />
+              <Route path="adauga" element={<Secretariat />} />
+            </Route>
+          }
 
           <Route path="/adeverinte">
             <Route path="cereri" element={<Adeverinte />} />
